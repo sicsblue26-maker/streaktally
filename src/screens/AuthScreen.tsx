@@ -49,7 +49,7 @@ export default function AuthScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>
-          {isSignUp ? 'Create Account' : 'Welcome Back'}
+          {isSignUp ? 'Create Account' : 'Streaktally'}
         </Text>
         <Text style={styles.subtitle}>
           {isSignUp ? 'Start building better habits' : 'Sign in to continue'}
