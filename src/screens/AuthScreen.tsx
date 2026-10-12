@@ -1,19 +1,22 @@
-//src/screens/AuthScreen.tsx
+// src/screens/AuthScreen.tsx
+import { supabase } from '@/lib/supabase';
+import { useTheme } from '@/theme/ThemeContext';
 import { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { supabase } from '@/lib/supabase';
-import { colors } from '@/theme/colors';
 
 export default function AuthScreen() {
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,6 +25,10 @@ export default function AuthScreen() {
   async function handleAuth() {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter email and password');
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
       return;
     }
 
@@ -33,8 +40,6 @@ export default function AuthScreen() {
 
     if (error) {
       Alert.alert('Error', error.message);
-    } else if (isSignUp) {
-      Alert.alert('Success', 'Check your email to confirm your account');
     }
 
     setLoading(false);
@@ -56,6 +61,7 @@ export default function AuthScreen() {
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
+          autoCorrect={false}
           keyboardType="email-address"
           placeholderTextColor={colors.textMuted}
         />
@@ -70,7 +76,7 @@ export default function AuthScreen() {
         />
 
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, loading && { opacity: 0.7 }]}
           onPress={handleAuth}
           disabled={loading}
         >
@@ -98,40 +104,41 @@ export default function AuthScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1, justifyContent: 'center', paddingHorizontal: 30 },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  input: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: colors.accent,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
-  switchButton: { marginTop: 20, alignItems: 'center' },
-  switchText: { color: colors.accent, fontSize: 14 },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    content: { flex: 1, justifyContent: 'center', paddingHorizontal: 30 },
+    title: {
+      fontSize: 32,
+      fontWeight: '800',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: 8,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: colors.textMuted,
+      textAlign: 'center',
+      marginBottom: 40,
+    },
+    input: {
+      backgroundColor: colors.card,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 12,
+      padding: 16,
+      fontSize: 16,
+      color: colors.text,
+      marginBottom: 16,
+    },
+    button: {
+      backgroundColor: colors.accent,
+      paddingVertical: 16,
+      borderRadius: 12,
+      alignItems: 'center',
+      marginTop: 8,
+    },
+    buttonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+    switchButton: { marginTop: 20, alignItems: 'center' },
+    switchText: { color: colors.accent, fontSize: 14 },
+  });
