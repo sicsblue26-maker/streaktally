@@ -1,0 +1,2 @@
+# streaktally
+Your habit tracker
