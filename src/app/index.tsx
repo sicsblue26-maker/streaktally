@@ -138,8 +138,27 @@ export default function TodayScreen() {
     });
   };
 
+  // ── Navigation helpers ─────────────────────────────────────
   const goToStats = () => {
     closeSidebar(() => router.push('/stats'));
+  };
+
+  const goToSettings = () => {
+    closeSidebar(() => router.push('/settings'));
+  };
+
+  const goToProfile = () => {
+    closeSidebar(() => router.push('/profile'));
+  };
+
+  const goToWhatsNew = () => {
+    closeSidebar(() => router.push('/whats-new'));
+  };
+
+  const goToReminders = () => {
+    // Placeholder until you build a dedicated reminders screen.
+    // For now, jump to Settings > Notifications.
+    closeSidebar(() => router.push('/settings'));
   };
 
   const toggleTheme = () => {
@@ -158,7 +177,6 @@ export default function TodayScreen() {
 
   const today = todayString();
 
-  // Aggregate stats for the profile header
   const totalHabits = habits.length;
   const completedToday = habits.filter((h) =>
     h.completions.includes(today)
@@ -291,8 +309,12 @@ export default function TodayScreen() {
             style={[styles.sidebar, { transform: [{ translateX }] }]}
           >
             <SafeAreaView edges={['top']} style={styles.sidebarSafe}>
-              {/* Profile / summary header */}
-              <View style={styles.profileHeader}>
+              {/* Profile / summary header — tappable to /profile */}
+              <TouchableOpacity
+                style={styles.profileHeader}
+                onPress={goToProfile}
+                activeOpacity={0.7}
+              >
                 <View style={styles.avatar}>
                   <Ionicons name="person" size={26} color={colors.accent} />
                 </View>
@@ -305,6 +327,7 @@ export default function TodayScreen() {
                 <TouchableOpacity
                   onPress={() => closeSidebar()}
                   style={styles.closeBtn}
+                  hitSlop={8}
                 >
                   <Ionicons
                     name="close"
@@ -312,7 +335,7 @@ export default function TodayScreen() {
                     color={colors.textMuted}
                   />
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
 
               {/* Mini stat row */}
               <View style={styles.statRow}>
@@ -352,17 +375,17 @@ export default function TodayScreen() {
                   icon="notifications-outline"
                   label="Reminders"
                   colors={colors}
-                  onPress={() => closeSidebar()}
+                  onPress={goToReminders}
                 />
                 <SidebarItem
                   icon="settings-outline"
                   label="Settings"
                   colors={colors}
-                  onPress={() => closeSidebar()}
+                  onPress={goToSettings}
                 />
               </View>
 
-              {/* Premium card pushed toward bottom */}
+              {/* Footer */}
               <View style={styles.sidebarFooter}>
                 <TouchableOpacity
                   style={styles.premiumCard}
@@ -398,7 +421,10 @@ export default function TodayScreen() {
                   <Text style={styles.logoutLabel}>Logout</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.version}>v1.0.0</Text>
+                {/* Version now tappable → What's New */}
+                <TouchableOpacity onPress={goToWhatsNew} hitSlop={6}>
+                  <Text style={styles.version}>v1.0.0 · What's new</Text>
+                </TouchableOpacity>
               </View>
             </SafeAreaView>
           </Animated.View>
@@ -556,7 +582,6 @@ const makeStyles = (colors: any) =>
     },
     fabText: { color: '#fff', fontWeight: '700', fontSize: 16 },
 
-    // Sidebar
     sidebarContainer: {
       position: 'absolute',
       top: 0,
@@ -596,7 +621,6 @@ const makeStyles = (colors: any) =>
     },
     sidebarSafe: { flex: 1 },
 
-    // Profile header
     profileHeader: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -632,7 +656,6 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.card,
     },
 
-    // Stat row
     statRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -671,7 +694,6 @@ const makeStyles = (colors: any) =>
 
     sidebarBody: { flex: 1, paddingHorizontal: 8, paddingTop: 12 },
 
-    // Footer
     sidebarFooter: {
       paddingHorizontal: 16,
       paddingBottom: 12,
