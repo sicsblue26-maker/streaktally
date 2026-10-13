@@ -4,7 +4,7 @@
     "slug": "streaktally",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/splash.png",
+    "icon": "./assets/images/streaktally.png",
     "scheme": "streaktally",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -29,7 +29,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash.png",
+          "image": "./assets/images/streaktally.png",
           "imageWidth": 76
         }
       ],
